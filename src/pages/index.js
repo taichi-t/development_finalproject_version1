@@ -16,7 +16,11 @@ import "../styles/app.scss"
 class IndexPage extends React.Component {
   render() {
     const { data } = this.props
-    const posts = data.allMarkdownRemark.edges
+    console.log(data)
+    const posts = data.allContentfulBlogPosts.edges
+
+    console.log(posts[0].node.image.fluid.src)
+
     return (
       <Layout>
         <SEO />
@@ -44,27 +48,24 @@ class IndexPage extends React.Component {
           <h2>Blog Posts</h2>
           <div className="blog-posts__container">
             {posts.map(({ node }) => {
-              const title = node.frontmatter.title || node.fields.slug
+              const title = node.title || node.slug
               return (
-                <div key={node.fields.slug}>
-                  <Link to={node.fields.slug}>
+                <div key={node.slug}>
+                  <Link to={node.slug}>
                     <Card
                       className="mdc-card--clickable anoun-blog-card"
-                      key={node.fields.slug}
+                      key={node.slug}
                     >
                       <Img
                         className="mdc-card__media"
-                        fluid={
-                          node.frontmatter.featured_image.childImageSharp.fluid
-                        }
+                        fluid={node.image.fluid.src}
                       />
                       <div className="anoun-blog-card-content__container">
                         <h3>{title}</h3>
-                        <small>{node.frontmatter.date}</small>
+                        <small>{node.createdAt}</small>
                         <p
                           dangerouslySetInnerHTML={{
-                            __html:
-                              node.frontmatter.description || node.excerpt,
+                            __html: node.excerpt,
                           }}
                         />
                       </div>
@@ -83,28 +84,20 @@ class IndexPage extends React.Component {
 export default IndexPage
 
 export const indexQuery = graphql`
-  query {
-    allMarkdownRemark(
-      filter: { fileAbsolutePath: { regex: "/posts/" } }
-      sort: { fields: [frontmatter___date], order: DESC }
-    ) {
+  {
+    allContentfulBlogPosts(limit: 3, sort: { fields: createdAt, order: DESC }) {
       edges {
         node {
-          excerpt
-          fields {
-            slug
-          }
-          frontmatter {
-            date(formatString: "MMMM DD, YYYY")
-            title
-            featured_image {
-              childImageSharp {
-                fluid(maxWidth: 1200, quality: 92) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
-              }
+          createdAt(formatString: "MMMM DD, YYYY")
+          id
+          slug
+          title
+          image {
+            fluid(maxWidth: 1200, quality: 92) {
+              src
             }
           }
+          expert
         }
       }
     }
