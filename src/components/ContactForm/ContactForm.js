@@ -4,6 +4,21 @@ import MaterialIcon from "@material/react-material-icon"
 import Button from "@material/react-button"
 import {Snackbar} from '@material/react-snackbar'
 
+// const data = {
+//   properties: [
+//     {
+//       type: "SYSTEM",
+//       name: "first_name",
+//       value: state.first_name,
+//     },
+//     {
+//       type: "SYSTEM",
+//       name: "last_name",
+//       value: state.last_name,
+//     },
+//   ],
+// }
+
 class ContactForm extends React.Component {
   constructor(props) {
     super(props)
@@ -27,6 +42,7 @@ class ContactForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault()
+
     fetch('https://submit-form.com/JOkjn0y8YzUohXij-0wMg', {
       method: 'POST',
       headers: {
