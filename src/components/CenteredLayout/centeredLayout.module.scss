@@ -1,0 +1,22 @@
+@import "../../styles/theme.scss";
+
+.siteContainer {
+  min-height: 100vh; /* will cover the 100% of viewport */
+  overflow: hidden;
+  display: block;
+  position: relative;
+  padding-bottom: 360px; /* height of your footer */
+}
+
+.siteMain {
+  min-height: 100%;
+  margin: 0 auto;
+  max-width: 860px;
+  padding: 1rem;
+}
+
+@media screen and (min-width: 1024px) {
+  // .siteMain {
+  //   max-width: 960px;
+  // }
+}

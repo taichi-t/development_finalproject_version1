@@ -1,0 +1,28 @@
+.siteHeader {
+  margin: 1rem auto;
+  font-weight: 900;
+}
+
+.siteHeader > nav ul {
+  text-align: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.siteHeader > nav ul li {
+  display: inline;
+  margin-right: .5rem;
+  font-family: "Lora", serif;
+  &:hover {
+    border-bottom: 2px solid var(--mdc-theme-primary);
+  }
+}
+
+.siteHeader > nav ul li a {
+  text-decoration: none;
+}
+
+.activeLink {
+  border-bottom: 2px solid var(--mdc-theme-primary);
+}
