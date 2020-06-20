@@ -15,13 +15,15 @@ import "../styles/app.scss"
 
 class IndexPage extends React.Component {
   render() {
-  const { data } = this.props
+    const { data } = this.props
     const posts = data.allMarkdownRemark.edges
     return (
       <Layout>
         <SEO />
         <section className="anoun-home--section1">
-          <h3>Gatsby Starter by <span className="anoun-title">ANOUN</span></h3>
+          <h3>
+            Gatsby Starter by <span className="anoun-title">ANOUN</span>
+          </h3>
           <h4>Material Business</h4>
           <img src={heroImage} alt="anoun-hero" />
           <Link to="/contact/">
@@ -44,30 +46,31 @@ class IndexPage extends React.Component {
             {posts.map(({ node }) => {
               const title = node.frontmatter.title || node.fields.slug
               return (
-                <Link to={node.fields.slug}>
-                  <Card
-                    className="mdc-card--clickable anoun-blog-card"
-                    key={node.fields.slug}
-                  >
-                    <Img
-                      className="mdc-card__media"
-                      fluid={
-                        node.frontmatter.featured_image.childImageSharp
-                          .fluid
-                      }
-                    />
-                    <div className="anoun-blog-card-content__container">
-                      <h3>{title}</h3>
-                      <small>{node.frontmatter.date}</small>
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            node.frontmatter.description || node.excerpt,
-                        }}
+                <div key={node.fields.slug}>
+                  <Link to={node.fields.slug}>
+                    <Card
+                      className="mdc-card--clickable anoun-blog-card"
+                      key={node.fields.slug}
+                    >
+                      <Img
+                        className="mdc-card__media"
+                        fluid={
+                          node.frontmatter.featured_image.childImageSharp.fluid
+                        }
                       />
-                    </div>
-                  </Card>
-                </Link>
+                      <div className="anoun-blog-card-content__container">
+                        <h3>{title}</h3>
+                        <small>{node.frontmatter.date}</small>
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              node.frontmatter.description || node.excerpt,
+                          }}
+                        />
+                      </div>
+                    </Card>
+                  </Link>
+                </div>
               )
             })}
           </div>
@@ -80,30 +83,30 @@ class IndexPage extends React.Component {
 export default IndexPage
 
 export const indexQuery = graphql`
-         query {
-           allMarkdownRemark(
-             filter: { fileAbsolutePath: { regex: "/posts/" } }
-             sort: { fields: [frontmatter___date], order: DESC }
-           ) {
-             edges {
-               node {
-                 excerpt
-                 fields {
-                   slug
-                 }
-                 frontmatter {
-                   date(formatString: "MMMM DD, YYYY")
-                   title
-                   featured_image {
-                     childImageSharp {
-                       fluid(maxWidth: 1200, quality: 92) {
-                         ...GatsbyImageSharpFluid_withWebp
-                       }
-                     }
-                   }
-                 }
-               }
-             }
-           }
-         }
-       `
+  query {
+    allMarkdownRemark(
+      filter: { fileAbsolutePath: { regex: "/posts/" } }
+      sort: { fields: [frontmatter___date], order: DESC }
+    ) {
+      edges {
+        node {
+          excerpt
+          fields {
+            slug
+          }
+          frontmatter {
+            date(formatString: "MMMM DD, YYYY")
+            title
+            featured_image {
+              childImageSharp {
+                fluid(maxWidth: 1200, quality: 92) {
+                  ...GatsbyImageSharpFluid_withWebp
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
