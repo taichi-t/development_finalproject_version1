@@ -1,18 +1,35 @@
 import React from "react"
-import TextField, {Input} from "@material/react-text-field"
+import TextField, { Input } from "@material/react-text-field"
 import MaterialIcon from "@material/react-material-icon"
 import Button from "@material/react-button"
-import {Snackbar} from '@material/react-snackbar'
+import { Snackbar } from "@material/react-snackbar"
+import postRequest from "../../lib/postRequest"
+
+// const data = {
+//   properties: [
+//     {
+//       type: "SYSTEM",
+//       name: "first_name",
+//       value: state.first_name,
+//     },
+//     {
+//       type: "SYSTEM",
+//       name: "last_name",
+//       value: state.last_name,
+//     },
+//   ],
+// }
 
 class ContactForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       phone: "",
       message: "",
-      open:false
+      open: false,
     }
   }
 
@@ -27,14 +44,38 @@ class ContactForm extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault()
-    fetch('https://submit-form.com/JOkjn0y8YzUohXij-0wMg', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      },
-      body: JSON.stringify(this.state)
-    })
+    const data = {
+      properties: [
+        {
+          type: "SYSTEM",
+          name: "first_name",
+          value: this.state.firstName,
+        },
+        {
+          type: "SYSTEM",
+          name: "last_name",
+          value: this.state.lastName,
+        },
+        {
+          name: "email",
+          value: this.state.email,
+        },
+        {
+          name: "phone",
+          value: this.state.phone,
+        },
+        {
+          name: "message",
+          type: "CUSTOM",
+          value: this.state.message,
+        },
+      ],
+    }
+
+    postRequest("/.netlify/functions/post", data)
+      .then(res => {
+        console.log(res)
+      })
       .then(this.handleSuccess)
       .catch(function(error) {
         console.error(error)
@@ -43,35 +84,43 @@ class ContactForm extends React.Component {
 
   handleSuccess = () => {
     this.setState({
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       phone: "",
       message: "",
-      open:true
+      open: true,
     })
   }
   render() {
     return (
-      
-      <form
-        onSubmit={this.handleSubmit}
-        className="anoun-contact__form"
-      >
+      <form onSubmit={this.handleSubmit} className="anoun-contact__form">
         {/* <!-- Prevent spam without a captcha --> */}
         <input
           type="checkbox"
           name="_honeypot"
-          tabindex="-1"
-          autocomplete="off"
+          tabIndex="-1"
+          autoComplete="off"
           hidden
         />
         <TextField
-          label="Full Name"
+          label="First Name"
           leadingIcon={<MaterialIcon icon="person" />}
         >
           <Input
-            value={this.state.name}
-            name="name"
+            value={this.state.firstName}
+            name="firstName"
+            onChange={this.handleInputChange}
+            required
+          />
+        </TextField>
+        <TextField
+          label="Last Name"
+          leadingIcon={<MaterialIcon icon="person" />}
+        >
+          <Input
+            value={this.state.lastName}
+            name="lastName"
             onChange={this.handleInputChange}
             required
           />
@@ -108,7 +157,11 @@ class ContactForm extends React.Component {
         >
           send
         </Button>
-        <Snackbar open={this.state.open} message="Sent! We'll get back to you ASAP 😊" actionText="dismiss" />
+        <Snackbar
+          open={this.state.open}
+          message="Sent! We'll get back to you ASAP 😊"
+          actionText="dismiss"
+        />
       </form>
     )
   }
