@@ -19,7 +19,7 @@ class IndexPage extends React.Component {
     console.log(data)
     const posts = data.allContentfulBlogPosts.edges
 
-    console.log(posts[0].node.image.fluid.src)
+    console.log(posts[0].node.expert)
 
     return (
       <Layout>
@@ -52,20 +52,17 @@ class IndexPage extends React.Component {
               return (
                 <div key={node.slug}>
                   <Link to={node.slug}>
-                    <Card
-                      className="mdc-card--clickable anoun-blog-card"
-                      key={node.slug}
-                    >
+                    <Card className="mdc-card--clickable anoun-blog-card">
                       <Img
                         className="mdc-card__media"
-                        fluid={node.image.fluid.src}
+                        fluid={node.image.fluid}
                       />
                       <div className="anoun-blog-card-content__container">
                         <h3>{title}</h3>
                         <small>{node.createdAt}</small>
                         <p
                           dangerouslySetInnerHTML={{
-                            __html: node.excerpt,
+                            __html: `${node.expert} ...`,
                           }}
                         />
                       </div>
@@ -93,8 +90,12 @@ export const indexQuery = graphql`
           slug
           title
           image {
-            fluid(maxWidth: 1200, quality: 92) {
-              src
+            fluid(
+              maxWidth: 1200
+              quality: 92
+              sizes: "(max-width: 1200px) 100vw"
+            ) {
+              ...GatsbyContentfulFluid
             }
           }
           expert
