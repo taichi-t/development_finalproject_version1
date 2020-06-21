@@ -16,19 +16,22 @@ import "../styles/app.scss"
 class IndexPage extends React.Component {
   render() {
     const { data } = this.props
-    console.log(data)
     const posts = data.allContentfulBlogPosts.edges
-
-    console.log(posts[0].node.expert)
+    const site = data.site.siteMetadata
 
     return (
       <Layout>
         <SEO />
         <section className="anoun-home--section1">
-          <h3>
-            Gatsby Starter by <span className="anoun-title">ANOUN</span>
-          </h3>
-          <h4>Material Business</h4>
+          <h2
+            style={{
+              textAlign: "center",
+              fontSize: "26px",
+              fontWeight: "bold",
+            }}
+          >
+            {site.titleTemplate}
+          </h2>
           <img src={heroImage} alt="anoun-hero" />
           <Link to="/contact/">
             <Button raised className="mdc-button--round">
@@ -45,13 +48,13 @@ class IndexPage extends React.Component {
           </h3>
         </section>
         <section className="anoun-home--section3">
-          <h2>Blog Posts</h2>
+          <h2>Recent Posts</h2>
           <div className="blog-posts__container">
             {posts.map(({ node }) => {
               const title = node.title || node.slug
               return (
-                <div key={node.slug}>
-                  <Link to={node.slug}>
+                <div key={node.slug} className="post-container">
+                  <Link to={`/blog/${node.slug}`}>
                     <Card className="mdc-card--clickable anoun-blog-card">
                       <Img
                         className="mdc-card__media"
@@ -72,6 +75,13 @@ class IndexPage extends React.Component {
               )
             })}
           </div>
+          <div style={{ margin: "40px 0" }}>
+            <Link to="/blog/">
+              <Button raised className="mdc-button--round">
+                Read more
+              </Button>
+            </Link>
+          </div>
         </section>
       </Layout>
     )
@@ -82,7 +92,17 @@ export default IndexPage
 
 export const indexQuery = graphql`
   {
-    allContentfulBlogPosts(limit: 3, sort: { fields: createdAt, order: DESC }) {
+    site {
+      siteMetadata {
+        title
+        titleTemplate
+        description
+        siteUrl
+        image
+        owner
+      }
+    }
+    allContentfulBlogPosts(limit: 2, sort: { fields: createdAt, order: DESC }) {
       edges {
         node {
           createdAt(formatString: "MMMM DD, YYYY")

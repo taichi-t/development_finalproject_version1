@@ -1,6 +1,7 @@
 import React from "react"
 import { Link, StaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
+import "./blogPostGrid.module.scss"
 
 import Card from "@material/react-card"
 
@@ -9,37 +10,32 @@ function BlogPostGrid() {
     <StaticQuery
       query={blogPostQuery}
       render={data => {
-        const posts = data.allMarkdownRemark.edges
+        const posts = data.allContentfulBlogPosts.edges
         return (
           <section className="page-main__section">
             <div className="blog-posts__container">
               {posts.map(({ node }) => {
-                const title = node.frontmatter.title || node.fields.slug
+                const title = node.title || node.slug
                 return (
-                  <Link to={node.fields.slug}>
-                    <Card
-                      className="mdc-card--clickable anoun-blog-card"
-                      key={node.fields.slug}
-                    >
+                  <div key={node.slug} style={{ marginBottom: "20px" }}>
+                    <Link to={node.slug}>
+                      <Card className="mdc-card--clickable anoun-blog-card">
                         <Img
                           className="mdc-card__media"
-                          fluid={
-                            node.frontmatter.featured_image.childImageSharp
-                              .fluid
-                          }
+                          fluid={node.image.fluid}
                         />
                         <div className="anoun-blog-card-content__container">
                           <h3>{title}</h3>
-                          <small>{node.frontmatter.date}</small>
+                          <small>{node.createdAt}</small>
                           <p
                             dangerouslySetInnerHTML={{
-                              __html:
-                                node.frontmatter.description || node.excerpt,
+                              __html: node.expert,
                             }}
                           />
                         </div>
-                    </Card>
-                  </Link>
+                      </Card>
+                    </Link>
+                  </div>
                 )
               })}
             </div>
@@ -51,28 +47,24 @@ function BlogPostGrid() {
 }
 
 const blogPostQuery = graphql`
-  query BlogPostQuery {
-    allMarkdownRemark(
-      filter: { fileAbsolutePath: { regex: "/posts/" } }
-      sort: { fields: [frontmatter___date], order: DESC }
-    ) {
+  {
+    allContentfulBlogPosts(sort: { fields: createdAt, order: DESC }) {
       edges {
         node {
-          excerpt
-          fields {
-            slug
-          }
-          frontmatter {
-            date(formatString: "MMMM DD, YYYY")
-            title
-            featured_image {
-              childImageSharp {
-                fluid(maxWidth: 1200, quality: 92) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
-              }
+          createdAt(formatString: "MMMM DD, YYYY")
+          id
+          slug
+          title
+          image {
+            fluid(
+              maxWidth: 1200
+              quality: 92
+              sizes: "(max-width: 1200px) 100vw"
+            ) {
+              ...GatsbyContentfulFluid
             }
           }
+          expert
         }
       }
     }

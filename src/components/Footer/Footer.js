@@ -4,7 +4,7 @@ import instagramIcon from "../../images/icons/instagram-round-white-24px.svg"
 import youtubeIcon from "../../images/icons/youtube-icon-24px.svg"
 import githubIcon from "../../images/icons/github-icon-24px.svg"
 
-import footerLogo from "../../images/ANOUN-footer-logo.png"
+import footerLogo from "../../images/logo.png"
 
 import styles from "./footer.module.scss"
 

@@ -14,33 +14,6 @@ class About extends React.Component {
         <SEO title="Contact Us" />
         <h1>Contact Us</h1>
         <section className="page-main__section contact-page-main__section">
-          <div className="anoun-contact-links__section">
-            <div>
-              <h3>Call/Text</h3>
-              <a
-                href="tel:+12088079333"
-              >
-                (208) 807-9333
-              </a>
-            </div>
-            <div>
-              <h3>Email</h3>
-              <a
-                href="mailto:hello@anoun.company"
-              >
-                hello@anoun.company
-              </a>
-            </div>
-            <div>
-              <h3>Instagram</h3>
-              <a
-                href="https://www.instagram.com/anoun.company"
-              >
-                @anoun.company
-              </a>
-            </div>
-          </div>
-          <h3>or just shoot us an email here!</h3>
           <ContactForm />
         </section>
       </CenteredLayout>

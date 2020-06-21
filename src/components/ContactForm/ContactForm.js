@@ -5,21 +5,6 @@ import Button from "@material/react-button"
 import { Snackbar } from "@material/react-snackbar"
 import postRequest from "../../lib/postRequest"
 
-// const data = {
-//   properties: [
-//     {
-//       type: "SYSTEM",
-//       name: "first_name",
-//       value: state.first_name,
-//     },
-//     {
-//       type: "SYSTEM",
-//       name: "last_name",
-//       value: state.last_name,
-//     },
-//   ],
-// }
-
 class ContactForm extends React.Component {
   constructor(props) {
     super(props)

@@ -1,5 +1,5 @@
 import React from "react"
-import { Link, graphql } from "gatsby"
+import { graphql } from "gatsby"
 import Img from "gatsby-image"
 
 import CenteredLayout from "../components/CenteredLayout/CenteredLayout"
@@ -10,26 +10,25 @@ import styles from "./blogPost.module.scss"
 
 class BlogPostTemplate extends React.Component {
   render() {
-    const post = this.props.data.markdownRemark
-    const { previous, next } = this.props.pageContext
+    const post = this.props.data.contentfulBlogPosts
+
     return (
       <CenteredLayout location={this.props.location}>
-        <SEO
-          title={post.frontmatter.title}
-          description={post.frontmatter.description || post.excerpt}
-        />
-        <h1>{post.frontmatter.title}</h1>
+        <SEO title={post.title} description={post.excerpt} />
+        <h1>{post.title}</h1>
         <p
           style={{
             display: `block`,
           }}
         >
-          {post.frontmatter.date}
+          {post.date}
         </p>
-        <Img fluid={post.frontmatter.featured_image.childImageSharp.fluid} />
+        <Img fluid={post.image.fluid} />
         <div
           className={styles.blogPostContent}
-          dangerouslySetInnerHTML={{ __html: post.html }}
+          dangerouslySetInnerHTML={{
+            __html: post.longText.childMarkdownRemark.html,
+          }}
         />
         <ul
           style={{
@@ -39,30 +38,7 @@ class BlogPostTemplate extends React.Component {
             listStyle: `none`,
             padding: 0,
           }}
-        >
-          <li>
-            {previous && (
-              <Link
-                style={{ textDecoration: `underline` }}
-                to={previous.fields.slug}
-                rel="prev"
-              >
-                ← {previous.frontmatter.title}
-              </Link>
-            )}
-          </li>
-          <li>
-            {next && (
-              <Link
-                style={{ textDecoration: `underline` }}
-                to={next.fields.slug}
-                rel="next"
-              >
-                {next.frontmatter.title} →
-              </Link>
-            )}
-          </li>
-        </ul>
+        />
       </CenteredLayout>
     )
   }
@@ -71,22 +47,25 @@ class BlogPostTemplate extends React.Component {
 export default BlogPostTemplate
 
 export const pageQuery = graphql`
-  query BlogPostBySlug($slug: String!) {
-    markdownRemark(fields: { slug: { eq: $slug } }) {
+  query ContentfulBlogPostBySlug($slug: String!) {
+    contentfulBlogPosts(slug: { eq: $slug }) {
+      category
+      createdAt(formatString: "MMMM DD, YYYY")
       id
-      excerpt(pruneLength: 160)
-      html
-      frontmatter {
-        title
-        date(formatString: "MMMM DD, YYYY")
-        featured_image {
-          childImageSharp {
-            fluid(maxWidth: 1200, quality: 92) {
-              ...GatsbyImageSharpFluid_withWebp
-            }
-          }
+      image {
+        fluid {
+          ...GatsbyContentfulFluid
         }
       }
+      longText {
+        childMarkdownRemark {
+          html
+        }
+      }
+      slug
+      subtitle
+      title
+      expert
     }
   }
 `
